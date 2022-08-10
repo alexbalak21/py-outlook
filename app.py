@@ -6,34 +6,61 @@ from datetime import date, datetime
 opst = pypff.open('backup.pst')
 root = opst.get_root_folder()
 
-def getSubFolders(item, name):
-    # subFoldersNbr = item.get_number_of_sub_folders()
-    # nbrMsg = item.get_number_of_sub_messages()
-    itemNbr = item.get_number_of_sub_items()
-    # print(f"NBR SUB FOLDERS OF {name} : {subFoldersNbr}")
-    print('--------------------------------')
-    print(f"NBR SUB ITEMS OF {name} : {itemNbr}")
-    print('--------------------------------')
-    # print(f"NBR SUB MESSAGES OF {name} : {nbrMsg}")
-    print('--------------------------------')
-    return 0
+# WHILE SUB FOLDER IS NOT 0 : GET IN ALL SUBFOLDERS AND GET MAILS
+def getAllMessages(item):
+    messages = []
+    msgs = []
+    nbrSubFolders = item.get_number_of_sub_folders()
+    while (nbrSubFolders > 0):
+        for i in nbrSubFolders:
+            currentFolder = item.get_sub_folder(i)
+            nbrMsg = currentFolder.get_number_of_sub_messages()
+            if (nbrMsg > 0):
+                for j in nbrMsg:
+                    msg = currentFolder.get_sub_message(j)
+                    messages.append(msg)
+            msgs = getAllMessages(currentFolder)
+            messages.extend(msgs)
+    return messages
 
-# 3 subfolders, for me, only 2nd one has content
-# Use 'root.get_number_of_sub_folders()' to see which folder is blan
-rootSubItems = root.get_number_of_sub_items()
-rootSubFolders = root.get_number_of_sub_folders()
-rootSubMessages = root.get_number_of_sub_messages()
-folder2 = root.get_sub_folder(1)
-folder3 = folder2.get_sub_folder(1)
-folder4 = folder3.get_sub_folder(0)
-getSubFolders(folder4, 'INBOX')
-msg = folder4.get_sub_message(0)
-getSubFolders(msg, 'MSG')
+# OPEM EACH SUB FOLDER
+def checkSubFolders(folder):
+    messages = []
+    nbrSubFolders = folder.get_number_of_sub_folders()
+    for n in nbrSubFolders:
+        currentFolder = folder.get_sub_folder(n)
+        messages.extend(getMessages(currentFolder))
+    return messages
+
+# OPEN SUB FOLDER UNTIL IT GOT NONE
+def goToLastSubFolder(folder):
+    messages = []
+    messages.extend(getMessages(folder))
+    gotSubFolder = True
+    while goToLastSubFolder :
+        if (folder.get_number_of_sub_folders() > 0):
+            goToLastSubFolder = True
+            folder = folder.get_sub_folder(0)
+        else:
+            goToLastSubFolder = False
 
 
-creation_time = msg.get_creation_time()
-delivery_time = msg.get_delivery_time()
-subject = msg.get_subject()
 
 
-print(delivery_time, subject)
+#CHECK MESSAGES
+def getMessages(folder):
+    messages = []
+    nbrMsg = folder.get_number_of_sub_messages()
+    if (nbrMsg > 0):
+        for j in nbrMsg:
+            msg = folder.get_sub_message(j)
+            messages.append(msg)
+    else:
+        return messages
+    return messages
+
+# print(len(allMessages))
+
+# creation_time = msg.get_creation_time()
+# delivery_time = msg.get_delivery_time()
+# subject = msg.get_subject()
