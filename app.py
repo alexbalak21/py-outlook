@@ -28,9 +28,14 @@ def checkSubFolders(folder):
     print ('CHECK SUB FOLDERS')
     messages = []
     nbrSubFolders = folder.get_number_of_sub_folders()
-    print('NBR_SUB_FOLDERS :', nbrSubFolders)
+    print('NBR OF FOLDERS :', nbrSubFolders)
+    level = checkLevelofSubFolders(folder)
+    print('FOLDER ROOT')
+    messages.extend(goToLastSubFolder(folder))
     for n in range(nbrSubFolders):
+        print('FOLDER ', n)
         currentFolder = folder.get_sub_folder(n)
+        print('LEVEL ', checkLevelofSubFolders(currentFolder))
         messages.extend(goToLastSubFolder(currentFolder))
     return messages
 
@@ -50,6 +55,23 @@ def goToLastSubFolder(folder):
             gotSubFolder = False
             break
     return messages
+
+
+def checkLevelofSubFolders(folder):
+    gotSubFolder = True
+    level = 0
+    while gotSubFolder :
+        if (folder.get_number_of_sub_folders() > 0):
+            gotSubFolder = True
+            folder = folder.get_sub_folder(0)
+            level+=1
+        else:
+            gotSubFolder = False
+            break
+    return level
+
+
+
 
 
 #CHECK MESSAGES
