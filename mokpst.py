@@ -1,5 +1,6 @@
-
+import inspect
 import pypff
+
 
 class Message:
     def __init__(self, subject:str, date_time:str) -> None:
@@ -8,7 +9,7 @@ class Message:
         self.ticket_number = subject.split('-')[1]
 
 
-def parse_pst_file(file_name:str, filter= 'DUSWUSERSUPPSN1'):
+def parse_pst_file(file_name:str, filter = ''):
     opst = pypff.open(file_name)
     root = opst.get_root_folder()
     messages = checkFolder(root, filter)
@@ -36,16 +37,27 @@ def parseAllSubFolders(folder, filter, nbrOfSub):
 
 
 #CHECK MESSAGES AND RETURNS ALL MESSAGES OF FOLDER IN AN ARRAY
-def getMessages(folder, filter = 'DUSWUSERSUPPSN1'): 
+def getMessages(folder, filtrer = ''): 
     messages = []
     nbrMsg = folder.get_number_of_sub_messages()
     if (nbrMsg > 0):
         for n in range(nbrMsg):
             msg = folder.get_sub_message(n)
+            modify_message(msg)
             subject = msg.get_subject()
-            #FILTER SUBJECT BY filter 
-            if filter in subject:
-                delivery_time = msg.get_delivery_time()
-                msgObj = Message(subject=subject, date_time=delivery_time)
-                messages.append(msgObj)
+            delivery_time = msg.get_delivery_time()
+            message = [subject, msg.get_delivery_time()]
+            messages.append(message)
     return messages
+
+
+def modify_message(message):
+    subject = message.get_subject()
+    subject = 'DUSWUSERSUPPSN1-3451 ' + subject
+    message.subject = subject
+    print('SUBJECT = ', message.get_subject())
+
+
+
+
+messages = parse_pst_file('test.pst', '')

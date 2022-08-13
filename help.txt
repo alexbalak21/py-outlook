@@ -1,0 +1,190 @@
+class message(item)
+ |  pypff message object (wraps message type libpff_item_t)
+ |
+ |  Method resolution order:
+ |      message
+ |      item
+ |      builtins.object
+ |
+ |  Methods defined here:
+ |
+ |  get_attachment(...)
+ |      get_attachment(attachment_index) -> Object or None
+ |
+ |      Retrieves a specific attachment.
+ |
+ |  get_client_submit_time(...)
+ |      get_client_submit_time() -> Datetime or None
+ |
+ |      Returns the client submit date and time.
+ |
+ |  get_client_submit_time_as_integer(...)
+ |      get_client_submit_time_as_integer() -> Integer or None
+ |
+ |      Returns the client submit date and time as a 64-bit integer containing a FILETIME value.
+ |
+ |  get_conversation_topic(...)
+ |      get_conversation_topic() -> Unicode string or None
+ |
+ |      Retrieves the conversation topic.
+ |
+ |  get_creation_time(...)
+ |      get_creation_time() -> Datetime or None
+ |
+ |      Returns the creation date and time.
+ |
+ |  get_creation_time_as_integer(...)
+ |      get_creation_time_as_integer() -> Integer or None
+ |
+ |      Returns the creation date and time as a 64-bit integer containing a FILETIME value.
+ |
+ |  get_delivery_time(...)
+ |      get_delivery_time() -> Datetime or None
+ |
+ |      Returns the delivery date and time.
+ |
+ |  get_delivery_time_as_integer(...)
+ |      get_delivery_time_as_integer() -> Integer or None
+ |
+ |      Returns the delivery date and time as a 64-bit integer containing a FILETIME value.
+ |
+ |  get_html_body(...)
+ |      get_html_body() -> String or None
+ |
+ |      Retrieves the HTML body.
+ |
+ |  get_modification_time(...)
+ |      get_modification_time() -> Datetime or None
+ |
+ |      Returns the modification date and time.
+ |
+ |  get_modification_time_as_integer(...)
+ |      get_modification_time_as_integer() -> Integer or None
+ |
+ |      Returns the modification date and time as a 64-bit integer containing a FILETIME value.
+ |
+ |  get_number_of_attachments(...)
+ |      get_number_of_attachments() -> Integer
+ |
+ |      Retrieves the number of attachments.
+ |
+ |  get_plain_text_body(...)
+ |      get_plain_text_body() -> String or None
+ |
+ |      Retrieves the plain-text body.
+ |
+ |  get_rtf_body(...)
+ |      get_rtf_body() -> String or None
+ |
+ |      Retrieves the RTF body.
+ |
+ |  get_sender_name(...)
+ |      get_sender_name() -> Unicode string or None
+ |
+ |      Retrieves the sender name.
+ |
+ |  get_subject(...)
+ |      get_subject() -> Unicode string or -None
+ |
+ |      Retrieves the subject.
+ |
+ |  get_transport_headers(...)
+ |      get_transport_headers() -> String or None
+ |
+ |      Retrieves the transport headers.
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |
+ |  attachments
+ |      The attachments
+ |
+ |  client_submit_time
+ |      The client submit date and time.
+ |
+ |  conversation_topic
+ |      The conversation topic.
+ |
+ |  creation_time
+ |      The creation date and time.
+ |
+ |  delivery_time
+ |      The delivery date and time.
+ |
+ |  html_body
+ |      The HTML body.
+ |
+ |  modification_time
+ |      The modification date and time.
+ |
+ |  number_of_attachments
+ |      The number of attachments.
+ |
+ |  plain_text_body
+ |      The plain text body.
+ |
+ |  rtf_body
+ |      The RTF body.
+ |
+ |  sender_name
+ |      The sender name.
+ |
+ |  subject
+ |      The subject.
+ |
+ |  transport_headers
+ |      The transport headers.
+ |
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from item:
+ |
+ |  __init__(self, /, *args, **kwargs)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |
+ |  get_identifier(...)
+ |      get_identifier() -> Integer or None
+ |
+ |      Retrieves the identifier.
+ |
+ |  get_number_of_entries(...)
+ |      get_number_of_entries() -> Integer or None
+ |
+ |      Retrieves the number of entries.
+ |
+ |  get_number_of_record_sets(...)
+ |      get_number_of_record_sets() -> Integer or None
+ |
+ |      Retrieves the number of record sets.
+ |
+ |  get_number_of_sub_items(...)
+ |      get_number_of_sub_items() -> Integer or None
+ |
+ |      Retrieves the number of sub items.
+ |
+ |  get_record_set(...)
+ |      get_record_set(record_set_index) -> Object or None
+ |
+ |      Retrieves the record set specified by the index.
+ |
+ |  get_sub_item(...)
+ |      get_sub_item(sub_item_index) -> Object or None
+ |
+ |      Retrieves the sub item specified by the index.
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from item:
+ |
+ |  identifier
+ |      The identifier.
+ |
+ |  number_of_entries
+ |      The number of entries.
+ |
+ |  number_of_record_sets
+ |      The number of record sets.

@@ -21,22 +21,21 @@ class Ticket:
             )
 
 
-tickets = []
-with open('jira.csv', 'r') as csv_file:
-    render = csv.reader(csv_file)
-    for row in render:
-        row = row[0]
-        row = row.split(';')
-        if(row[0] == ''):
-            break
-        if (row[1] == 'ID de ticket'):
-            continue
-        ticket_name = row[0]
-        ticket_date_time = row[2]
-        current_ticket = Ticket(key=ticket_name, InputDate_time=ticket_date_time)
-        tickets.append(current_ticket)
 
-ticket = tickets[96]
-print('TICKET NUMBER', ticket.number)
-print('HOUR : ',ticket.date_time.hour)
-print('MINUTE : ',ticket.date_time.minute)
+def parse_csv_file(csv_file:str):
+    tickets = []
+    with open(csv_file, 'r') as csv_file:
+        render = csv.reader(csv_file)
+        for row in render:
+            row = row[0]
+            row = row.split(';')
+            if(row[0] == ''):
+                break
+            if (row[1] == 'ID de ticket'):
+                continue
+            current_ticket = Ticket(key=row[0], InputDate_time=row[2])
+            tickets.append(current_ticket)
+    return tickets
+
+
+tickets = parse_csv_file('jira.csv')
