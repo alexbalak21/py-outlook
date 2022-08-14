@@ -1,6 +1,5 @@
 
 import datetime
-from xmlrpc.client import DateTime
 import pypff
 
 class Message:
@@ -49,6 +48,7 @@ def getMessages(folder, filter = 'DUSWUSERSUPPSN1'):
             #FILTER SUBJECT BY filter 
             if filter in subject:
                 delivery_time = msg.get_delivery_time()
+                delivery_time = delivery_time.replace(microsecond=0)
                 ticketNumber = get_ticket_number(subject, filter + '-')
                 msgObj = Message(subject=subject, key=filter, number=ticketNumber, date_time=delivery_time)
                 messages.append(msgObj)
@@ -61,10 +61,3 @@ def get_ticket_number(subject:str, filter:str) -> int:
     for i in range(4):
         nbrStr += subject[pos + i]
     return int(nbrStr)
-
-
-msgs = parse_pst_file('final.pst')
-i = 1
-for message in msgs:
-    print(f"{message.key}-{message.number};2233445;{message.date_time.day}/{message.date_time.month}/{message.date_time.year} {message.date_time.hour}:{message.date_time.minute}")
-    

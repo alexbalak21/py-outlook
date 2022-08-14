@@ -1,12 +1,11 @@
-import csv
 from datetime import datetime
 
 class Ticket:
-    def __init__(self, key:str, InputDate_time:str) -> None:
-        self.key = key
-        name_number = key.split('-')
-        self.name = name_number[0]
-        self.number:int = int(name_number[1])
+    def __init__(self, name:str, InputDate_time:str) -> None:
+        self.name = name
+        name_number = name.split('-')
+        self.key = name_number[0]
+        self.number = int(name_number[1])
         dateTime = InputDate_time.split(' ')
         date = dateTime[0]
         time = dateTime[1]
@@ -21,24 +20,23 @@ class Ticket:
             )
 
 
-
-def parse_csv_file(csv_file:str):
+def parse_csv(file_name, separator = ';'):
+    file = open(file_name, 'r')
+    delCol2 = False
+    lines = file.readlines()
+    line1 = lines[0].rstrip().split(separator)
+    if line1[1] == 'ID de ticket':
+        lines.pop(0)
+        delCol2 = True
+    if len(line1[1]) == 7:
+        delCol2 = True
+    file.close()
     tickets = []
-    with open(csv_file, 'r') as csv_file:
-        render = csv.reader(csv_file)
-        for row in render:
-            row = row[0]
-            row = row.split(';')
-            if(row[0] == ''):
-                break
-            if (row[1] == 'ID de ticket'):
-                continue
-            current_ticket = Ticket(key=row[0], InputDate_time=row[2])
-            tickets.append(current_ticket)
+    for line in lines:
+        line = line.rstrip()
+        ticket = line.split(separator)
+        if delCol2:
+            ticket.pop(1)
+            ticketObj = Ticket(name=ticket[0], InputDate_time=ticket[1])
+            tickets.append(ticketObj)
     return tickets
-
-
-tickets = parse_csv_file('test.csv')
-
-for ticket in tickets:
-    print(ticket.date_time)
