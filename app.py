@@ -2,11 +2,6 @@
 from csvparser import parse_csv
 from pstparser import parse_pst_file
 
-messages = parse_pst_file(file_name='test.pst')
-tickets = parse_csv('test.csv')
-print('NUMEBR OF MESSAGES :', len(messages))
-print('NUMEBR OF TICKETS :', len(tickets))
-
 
 def compare_tickets_messages(tickets, messages):
     matches = []
@@ -14,17 +9,17 @@ def compare_tickets_messages(tickets, messages):
         for message in messages:
             if ticket.key == message.key:
                 if (ticket.number == message.number):
-                    differance = ticket.date_time - message.date_time
-                    name_time = [ticket.name, differance]
+                    delta = ticket.date_time - message.date_time
+                    name_time = {'name': ticket.name, 'delta': delta}
                     matches.append(name_time)
+                    #DEV
+                    print(ticket.name, '-', delta.days)
     return matches
 
-
-matches = compare_tickets_messages(tickets, messages)
-
-i = 0
-for match in matches:
-    i+=1
-    delta = match[1]
-    name = match[0]
-    print(i, name, '-', str(delta))
+def create_csv_file(tickets, result_csv_file='result.csv'):
+    csv = open(result_csv_file, 'x')
+    for data in tickets:
+        delta = str(data['delta']).replace(',',' ')
+        line = data['name'] + ',' + delta + '\n'
+        csv.writelines(line)
+    csv.close()

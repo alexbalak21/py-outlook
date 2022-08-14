@@ -1,10 +1,6 @@
-ticket1 = 'SOME text [DUSWUSERSUPPSN1-6415] other [3D-HPC] Demande de création de user PDMS sur le bétasite'
-fil = 'DUSWUSERSUPPSN1-'
+file = open('test.txt', 'w')
 
+file.writelines('LINE 1\n')
+file.writelines('LINE 2\n')
 
-
-
-
-result = filterSubject(ticket1 , fil)
-
-print(result)
+file.close()

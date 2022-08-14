@@ -49,6 +49,7 @@ def getMessages(folder, filter = 'DUSWUSERSUPPSN1'):
             if filter in subject:
                 delivery_time = msg.get_delivery_time()
                 delivery_time = delivery_time.replace(microsecond=0)
+                delivery_time = delivery_time.replace(second=0)
                 ticketNumber = get_ticket_number(subject, filter + '-')
                 msgObj = Message(subject=subject, key=filter, number=ticketNumber, date_time=delivery_time)
                 messages.append(msgObj)
