@@ -38,4 +38,7 @@ def parse_csv_file(csv_file:str):
     return tickets
 
 
-tickets = parse_csv_file('jira.csv')
+tickets = parse_csv_file('test.csv')
+
+for ticket in tickets:
+    print(ticket.date_time)
