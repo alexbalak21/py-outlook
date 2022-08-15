@@ -1,28 +1,88 @@
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
+from os.path import exists
+
+
 
 from csvparser import parse_csv
 from pstparser import parse_pst_file
 from app import compare_tickets_messages, create_csv_file
 
 
+
+
 def getPst_FilePath():
-    filePath = filedialog.askrun_compare(filetypes=[("Outllok Data Files", ".pst")])
-    if hasattr(filePath, 'name'):
-        name = filePath.name
-        name = name.replace('/', '\\')
-        pst_input.config(fg='black')
-        pst_input.delete(0, END)
-        pst_input.insert(0, name)
+    filePath = filedialog.askopenfilename(filetypes=[("Outllok Data Files", ".pst")])
+    if not filePath:
+        return
+    name = filePath.replace('/', '\\')
+    pst_input.config(fg='black')
+    pst_input.delete(0, END)
+    pst_input.insert(0, name)
 
 def getCsv_FilePath():
-    filePath = filedialog.askrun_compare(filetypes=[("Comma Separated Values ", ".csv")])
-    if hasattr(filePath, 'name'):
-        name = filePath.name
-        name = name.replace('/', '\\')
-        csv_input.config(fg='black')
-        csv_input.delete(0, END)
-        csv_input.insert(0, name)
+    filePath = filedialog.askopenfilename(filetypes=[("Comma Separated Values ", ".csv")])
+    if not filePath:
+        return
+    name = filePath.replace('/', '\\')
+    csv_input.config(fg='black')
+    csv_input.delete(0, END)
+    csv_input.insert(0, name)
+
+selected_csv = False
+def save_csv():
+    global matches
+    file_name = ''
+    file_path = save_input.get()
+    if len(matches) < 1:
+        write_text_out('No Data to Save.')
+        return
+    global selected_csv
+    if selected_csv:
+        try:
+            file_name = create_csv_file(matches, result_csv_file=file_path)
+            write_text_out('File created : ' + file_name)
+            save_button.config(state=DISABLED)
+            return
+        except:
+            write_text_out('Could not write csv file.')
+            return
+    if not file_path.endswith('.csv'):
+        write_text_out('Seletc valid csv file.')
+        return
+    elif exists(file_path):
+        yes = messagebox.askyesno(title='Remplace', message='File Exists.\nRemplace it ?')
+        if yes:
+            try:
+                file_name = create_csv_file(matches, result_csv_file=file_path)
+                write_text_out('File created : '+ file_name)
+                return
+            except:
+                write_text_out('Error saving CSV.')
+                return
+    else:
+        try:
+            file_name = create_csv_file(matches, file_path)
+            write_text_out('File saved at : '+ file_name)
+        except:
+            write_text_out('Error saving at location : ' + file_path)
+            return
+
+
+def select_csv():
+    file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=[("Comma Separated Values ", ".csv")])
+    if not file_path:
+        return
+    name = file_path.replace('/', '\\')
+    save_input.delete(0, END)
+    save_input.insert(0, name)
+    global selected_csv
+    selected_csv = True
+    return
+
+
+matches = []
 
 def run_compare():
     pst_filePath = pst_input.get()
@@ -47,6 +107,7 @@ def run_compare():
         write_text_out(str(e))
         return
     try:
+        global matches
         matches = compare_tickets_messages(tickets, messages)
     except:
         write_text_out('Error Comparing:')
@@ -59,7 +120,6 @@ def run_compare():
         write_text_out('0 Tickets Trouvées')
         return
         
-    create_csv_file(matches)
     write_text_out('Number of matches found: '+ str(len(matches)))
     for match in matches:
         write_text_out(match['name'] + ' - ' + str(match['delta']))
@@ -90,8 +150,7 @@ title = Label(
     fg='black')
 title.pack(pady=10)
 
-pst_title = Label(window, text='Select PST file:', font=('Arial', 14))
-pst_title.pack()
+Label(window, text='Select PST file:', font=('Arial', 14)).pack()
 
 pst_input = Entry(window, font=('Arial', 14), width=28)
 pst_input.insert(0, 'D:\\DEV\\py-outlook\\test.pst')
@@ -100,8 +159,7 @@ pst_input.pack()
 open_pst_button = Button(window, text="Open pst", font=('Arial', 14), command=getPst_FilePath)
 open_pst_button.pack(pady=(0,10))
 
-csv_title = Label(window, text='Select CSV file:',  font=('Arial', 14))
-csv_title.pack(pady=(20, 0))
+Label(window, text='Select CSV file:',  font=('Arial', 14)).pack(pady=(20, 0))
 
 csv_input = Entry(window, font=('Arial', 14), width=28)
 csv_input.insert(0, 'D:\\DEV\\py-outlook\\test.csv')
@@ -125,5 +183,16 @@ text_out = Text(window, height=12, width=50)
 text_out.config(state=DISABLED)
 text_out.pack(padx=10, pady=10)
 
+frame_save = Frame(window, width=400, height=40)
+frame_save.pack(pady=10)
+frame_save.pack_propagate(0)
+
+label_save = Label(frame_save, text='Save CSV:', font=('Arial', 14)).pack(side=LEFT)
+save_input = Entry(frame_save, font=('Arial', 14))
+save_input.pack(side=LEFT)
+browse_button = Button(frame_save,font=('Arial', 14), text='Browse', command=select_csv)
+browse_button.pack(padx=5)
+save_button = Button(window, text='Save', font=('Arial', 14), command=save_csv)
+save_button.pack(pady=10)
 
 window.mainloop()

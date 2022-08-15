@@ -1,6 +1,4 @@
 # NEED TO IMPLEMENT THE TWO SCRIPTS
-from csvparser import parse_csv
-from pstparser import parse_pst_file
 
 
 def compare_tickets_messages(tickets, messages):
@@ -26,5 +24,6 @@ def create_csv_file(tickets, result_csv_file='result.csv'):
         delta = str(data['delta']).replace(',',' ')
         line = data['name'] + ',' + delta + '\n'
         csv.writelines(line)
+        file_name = csv.name
     csv.close()
-    return csv.name
+    return str(file_name)
