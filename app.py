@@ -20,8 +20,8 @@ def compare_tickets_messages(tickets, messages):
 
 def create_csv_file(tickets, result_csv_file='result.csv'):
     if len(tickets) == 0:
-        return ''
-    csv = open(result_csv_file, 'x')
+        raise ValueError('No tickets to store')
+    csv = open(result_csv_file, 'w')
     for data in tickets:
         delta = str(data['delta']).replace(',',' ')
         line = data['name'] + ',' + delta + '\n'

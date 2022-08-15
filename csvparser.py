@@ -21,10 +21,15 @@ class Ticket:
 
 
 def parse_csv(file_name, separator = ';'):
-    file = open(file_name, 'r')
+    try:
+        file = open(file_name, 'r')
+    except:
+        raise ValueError("Error Opening CSV file")
+    if not file.read():
+        raise ValueError('CSV file is Empty.')
     delCol2 = False
+    file.seek(0)
     lines = file.readlines()
-    
     line1 = lines[0].rstrip().split(separator)
     if line1[1] == 'ID de ticket':
         lines.pop(0)
