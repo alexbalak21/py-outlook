@@ -40,6 +40,8 @@ def parseAllSubFolders(folder, filter, nbrOfSub):
 #CHECK MESSAGES AND RETURNS ALL MESSAGES OF FOLDER IN AN ARRAY
 def getMessages(folder, filter = 'DUSWUSERSUPPSN1'): 
     messages = []
+    if not filter.endswith('-'):
+        filterWith = filter + '-'
     nbrMsg = folder.get_number_of_sub_messages()
     if (nbrMsg > 0):
         for n in range(nbrMsg):
@@ -50,7 +52,7 @@ def getMessages(folder, filter = 'DUSWUSERSUPPSN1'):
                 delivery_time = msg.get_delivery_time()
                 delivery_time = delivery_time.replace(microsecond=0)
                 delivery_time = delivery_time.replace(second=0)
-                ticketNumber = get_ticket_number(subject, filter + '-')
+                ticketNumber = get_ticket_number(subject, filterWith)
                 msgObj = Message(subject=subject, key=filter, number=ticketNumber, date_time=delivery_time)
                 messages.append(msgObj)
     return messages

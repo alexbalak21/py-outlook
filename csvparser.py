@@ -24,6 +24,7 @@ def parse_csv(file_name, separator = ';'):
     file = open(file_name, 'r')
     delCol2 = False
     lines = file.readlines()
+    
     line1 = lines[0].rstrip().split(separator)
     if line1[1] == 'ID de ticket':
         lines.pop(0)

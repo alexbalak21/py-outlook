@@ -13,13 +13,18 @@ def compare_tickets_messages(tickets, messages):
                     name_time = {'name': ticket.name, 'delta': delta}
                     matches.append(name_time)
                     #DEV
-                    print(ticket.name, '-', delta.days)
+                    print(ticket.name, '-', delta)
+                    delta_form = 'HH:MM:SS'
+
     return matches
 
 def create_csv_file(tickets, result_csv_file='result.csv'):
+    if len(tickets) == 0:
+        return ''
     csv = open(result_csv_file, 'x')
     for data in tickets:
         delta = str(data['delta']).replace(',',' ')
         line = data['name'] + ',' + delta + '\n'
         csv.writelines(line)
     csv.close()
+    return csv.name
