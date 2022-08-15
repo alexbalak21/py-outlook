@@ -10,10 +10,6 @@ def compare_tickets_messages(tickets, messages):
                     delta = ticket.date_time - message.date_time
                     name_time = {'name': ticket.name, 'delta': delta}
                     matches.append(name_time)
-                    #DEV
-                    print(ticket.name, '-', delta)
-                    delta_form = 'HH:MM:SS'
-
     return matches
 
 def create_csv_file(tickets, result_csv_file='result.csv'):

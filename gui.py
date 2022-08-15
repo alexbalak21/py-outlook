@@ -31,6 +31,21 @@ def getCsv_FilePath():
     csv_input.insert(0, name)
 
 selected_csv = False
+
+def select_csv():
+    file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=[("Comma Separated Values ", ".csv")])
+    global selected_csv
+    if not file_path:
+        save_input.config(state=NORMAL)
+        selected_csv = False
+        return
+    name = file_path.replace('/', '\\')
+    save_input.delete(0, END)
+    save_input.insert(0, name)
+    selected_csv = True
+    save_input.config(state=DISABLED)
+    return
+
 def save_csv():
     global matches
     file_name = ''
@@ -51,7 +66,7 @@ def save_csv():
     if not file_path.endswith('.csv'):
         write_text_out('Seletc valid csv file.')
         return
-    elif exists(file_path):
+    if exists(file_path):
         yes = messagebox.askyesno(title='Remplace', message='File Exists.\nRemplace it ?')
         if yes:
             try:
@@ -61,6 +76,9 @@ def save_csv():
             except:
                 write_text_out('Error saving CSV.')
                 return
+        else:
+            write_text_out('Aborted by user.')
+            return
     else:
         try:
             file_name = create_csv_file(matches, file_path)
@@ -68,18 +86,6 @@ def save_csv():
         except:
             write_text_out('Error saving at location : ' + file_path)
             return
-
-
-def select_csv():
-    file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=[("Comma Separated Values ", ".csv")])
-    if not file_path:
-        return
-    name = file_path.replace('/', '\\')
-    save_input.delete(0, END)
-    save_input.insert(0, name)
-    global selected_csv
-    selected_csv = True
-    return
 
 
 matches = []
@@ -95,11 +101,18 @@ def run_compare():
         write_text_out('Select Correct CSV file.')
         csv_input.config(fg='red')
         return
+    if not exists(pst_filePath):
+        write_text_out('PST file not found.')
+        return
+    if not exists(csv_filePath):
+        write_text_out('CSV file not found.')
+        return
     try:
         tickets = parse_csv(csv_filePath)
     except Exception as e:
         write_text_out('Error opening CSV file:')
         write_text_out(str(e))
+        return
     try:
         messages = parse_pst_file(pst_filePath)
     except Exception as e:
@@ -119,7 +132,6 @@ def run_compare():
     if len(tickets) < 1:
         write_text_out('0 Tickets Trouvées')
         return
-        
     write_text_out('Number of matches found: '+ str(len(matches)))
     for match in matches:
         write_text_out(match['name'] + ' - ' + str(match['delta']))
@@ -129,10 +141,6 @@ def write_text_out(text:str):
     line = text + '\n'
     text_out.insert(END, line)
     text_out.config(state=DISABLED)
-
-
-
-
 
 
 

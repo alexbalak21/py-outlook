@@ -11,7 +11,10 @@ class Message:
 
 
 def parse_pst_file(file_name:str, filter= 'DUSWUSERSUPPSN1'):
-    opst = pypff.open(file_name)
+    try:
+        opst = pypff.open(file_name)
+    except:
+        raise ValueError('Cant parse PST file.')
     root = opst.get_root_folder()
     messages = checkFolder(root, filter)
     return messages
